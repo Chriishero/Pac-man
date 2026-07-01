@@ -13,5 +13,9 @@ class Pacgum(BaseModel):
 
 
 class SuperPacgum(Pacgum):
+    model_config = {
+        "arbitrary_types_allowed": True
+    }
+
     duration: int = Field(ge=0)
     effect: Effect

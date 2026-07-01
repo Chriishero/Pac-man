@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import threading
 
 if TYPE_CHECKING:
-    from .Models import World
+    from .World import World
 
 
 class Effect(ABC):

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, PrivateAttr, model_validator
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from mazegenerator import MazeGenerator  # type:ignore
 
 
@@ -8,10 +8,12 @@ class MapError(ValueError):
 
 
 class Map(BaseModel):
-    width: int = Field(ge=1)
-    height: int = Field(ge=1)
+    width: int = Field(ge=1, default=15)
+    height: int = Field(ge=1, default=15)
     perfect: bool = Field(default=False)
     seed: int = Field(ge=0, default=42)
+    bg_color: Tuple[int, int, int] = Field(default=(128, 128, 128))
+    w_color: Tuple[int, int, int] = Field(default=(255, 255, 255))
 
     __maze: List[List[int]] = PrivateAttr()
 
@@ -22,7 +24,7 @@ class Map(BaseModel):
                 size=(self.width, self.height),
                 perfect=self.perfect,
             )
-            self._maze = gen.maze
+            self.__maze = gen.maze
         except Exception as e:
             raise MapError(e)
 
@@ -34,7 +36,7 @@ class Map(BaseModel):
 
     def get_walls(self, x: int, y: int) -> Dict[str, bool]:
         try:
-            v = self.__maze[y][x]
+            v = self.maze[y][x]
         except IndexError as e:
             raise IndexError(e)
 

@@ -1,0 +1,3 @@
+
+class MapError(ValueError):
+    pass

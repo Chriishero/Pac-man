@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, PrivateAttr
 import pygame
 import sys
-from .World import World
+from .Scene import Game, GameState
 
 
 class GUI(BaseModel):
@@ -12,7 +12,7 @@ class GUI(BaseModel):
     width: float = Field(ge=256, default=800)
     height: float = Field(ge=144, default=600)
     fps: float = Field(ge=5, default=5)
-    world: World
+    game: Game
 
     __state: bool = PrivateAttr()
     __screen: pygame.SurfaceType = PrivateAttr()
@@ -43,18 +43,24 @@ class GUI(BaseModel):
         pass
 
     def __on_render(self) -> None:
+        if self.game.state == GameState.PLAYING:
+            self.__render_game()
+        pygame.display.flip()
+        self.__clock.tick(self.fps)
+
+    def __render_game(self) -> None:
         try:
             self.__draw_world()
-            pygame.display.flip()
-            self.__clock.tick(self.fps)
         except Exception as e:
             raise ValueError(e)
 
     def __draw_world(self) -> None:
         self.__draw_map()
+        self.__draw_entity()
+        self.__draw_objects()
 
     def __draw_map(self) -> None:
-        map = self.world.map
+        map = self.game.world.map
         if self.width > self.height:
             case_size = self.height / map.height
             w, h = map.width * case_size, map.height * case_size
@@ -84,7 +90,7 @@ class GUI(BaseModel):
                         else:
                             end_x = start_x
                             end_y = start_y + case_size
-                    if w == "S" or w == "E":
+                    else:
                         start_x = left + case_size * (x + 1) - 1
                         start_y = top + case_size * (y + 1) - 1
                         if w == "S":
@@ -100,6 +106,19 @@ class GUI(BaseModel):
                             start_pos=(start_x, start_y),
                             end_pos=(end_x, end_y)
                         )
+
+    def __draw_entity(self) -> None:
+        self.__draw_player()
+        self.__draw_ghosts()
+
+    def __draw_player(self) -> None:
+        pass
+
+    def __draw_ghosts(self) -> None:
+        pass
+
+    def __draw_objects(self) -> None:
+        pass
 
     def __on_cleanup(self) -> None:
         pygame.quit()

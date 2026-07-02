@@ -8,6 +8,7 @@ dependencies = [
     "pydantic>=2.13.4",
     "pygame>=2.6.1",
     "mazegenerator",
+    "pygame-menu>=4.5.2",
 ]
 
 [tool.uv.sources]

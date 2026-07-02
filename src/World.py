@@ -1,12 +1,9 @@
 from pydantic import BaseModel, PrivateAttr
-from typing import List, TYPE_CHECKING
+from typing import List
 from .Entity import Player, Ghost
-from .Pacgum import Pacgum, SuperPacgum
+from .Object import Pacgum, SuperPacgum
 from .Map import Map
-
-
-if TYPE_CHECKING:
-    from .Effect import Effect
+from .effect.Effect import Effect
 
 
 class World(BaseModel):

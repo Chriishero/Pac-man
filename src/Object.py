@@ -1,11 +1,15 @@
 from pydantic import BaseModel, Field
-from .Effect import Effect
+from abc import ABC
+from .effect.Effect import Effect
 from .Entity import Player
 
 
-class Pacgum(BaseModel):
-    x: int = Field(ge=0)
-    y: int = Field(ge=0)
+class Object(ABC):
+    x: int
+    y: int
+
+
+class Pacgum(Object, BaseModel):
     score: int = Field(ge=0)
 
     def action(self, p: Player) -> None:
@@ -19,3 +23,11 @@ class SuperPacgum(Pacgum):
 
     duration: int = Field(ge=0)
     effect: Effect
+
+
+class Cherry(Object, BaseModel):
+    score: int = Field(ge=0)
+
+
+class Stawberry(Object, BaseModel):
+    score: int = Field(ge=0)

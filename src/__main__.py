@@ -2,6 +2,7 @@ from .World import World
 from .Map import Map
 from .Entity import Player
 from .GUI import GUI
+from .Scene import Game
 
 
 def main() -> None:
@@ -11,7 +12,10 @@ def main() -> None:
         ghosts=list(),
         pacgums=list()
     )
-    gui = GUI(world=world)
+    game = Game(
+        world=world
+    )
+    gui = GUI(game=game)
     gui.init()
     gui.run()
 

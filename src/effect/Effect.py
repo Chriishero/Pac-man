@@ -4,17 +4,17 @@ from typing import TYPE_CHECKING
 import threading
 
 if TYPE_CHECKING:
-    from .World import World
+    from ..World import World
 
 
 class Effect(ABC):
     @abstractmethod
-    def apply(self, world: World) -> None:
-        pass
+    def apply(self, world: "World") -> None:
+        ...
 
     @abstractmethod
-    def remove(self, world: World) -> None:
-        pass
+    def remove(self, world: "World") -> None:
+        ...
 
 
 class MakeGhostsEdibleEffect(Effect, BaseModel):
@@ -25,13 +25,13 @@ class MakeGhostsEdibleEffect(Effect, BaseModel):
 
     __timer: threading.Timer = PrivateAttr()
 
-    def apply(self, world: World) -> None:
+    def apply(self, world: "World") -> None:
         for g in world.ghosts:
             g.edible = True
 
         self.__timer = threading.Timer(self.duration, self.remove)
         self.__timer.start()
 
-    def remove(self, world: World) -> None:
+    def remove(self, world: "World") -> None:
         for g in world.ghosts:
             g.edible = False

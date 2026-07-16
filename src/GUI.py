@@ -3,7 +3,7 @@ import pygame
 from typing import Dict
 import sys
 from .World import World
-from .Scene import Scene, Game
+from .Scene import Scene, Game, Menu
 from .State import GUIState
 
 
@@ -14,7 +14,7 @@ class GUI(BaseModel):
 
     width: float = Field(ge=256, default=800)
     height: float = Field(ge=144, default=600)
-    fps: float = Field(ge=5, default=5)
+    fps: int = Field(ge=5, default=5)
     world: World
 
     __state: GUIState = PrivateAttr()
@@ -29,7 +29,7 @@ class GUI(BaseModel):
                                                     pygame.RESIZABLE)
             self.__clock = pygame.time.Clock()
             self.__scene = {
-                GUIState.MAIN_MENU: Game(world=self.world),
+                GUIState.MAIN_MENU: Menu(),
                 GUIState.MODE_MENU: Game(world=self.world),
                 GUIState.GAME: Game(world=self.world)
             }

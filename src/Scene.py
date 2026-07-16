@@ -1,9 +1,10 @@
 from pydantic import BaseModel, Field, model_validator
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, List
 import pygame
 from .World import World
 from .State import GUIState, SceneState, GameState
+from .Menu import Button
 
 
 class Scene(ABC):
@@ -109,3 +110,18 @@ class Game(Scene, BaseModel):
 
     def __draw_objects(self, s: pygame.SurfaceType) -> None:
         pass
+
+
+class Menu(Scene, BaseModel):
+    def on_event(self, event: pygame.event.Event) -> GUIState:
+        if event == pygame.KEYDOWN:
+            if event == pygame.K_ESCAPE:
+                return GUIState.QUIT
+        return GUIState.MAIN_MENU
+
+    def on_loop(self) -> None:
+        pass
+
+    def on_render(self, s: pygame.SurfaceType) -> None:
+        b = Button(x=150, y=50, text="Boutton oui")
+        b.draw(s)

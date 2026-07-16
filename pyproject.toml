@@ -3,7 +3,7 @@ name = "pac-man"
 version = "0.1.0"
 description = "Pac-man 42 project"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = "==3.13.*"
 dependencies = [
     "pydantic>=2.13.4",
     "pygame>=2.6.1",

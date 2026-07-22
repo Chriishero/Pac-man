@@ -4,7 +4,7 @@ from typing import Optional, List
 import pygame
 from .World import World
 from .State import GUIState, SceneState, GameState
-from .Menu import Button
+from .Menu import Button, Label
 
 
 class Scene(ABC):
@@ -19,7 +19,7 @@ class Scene(ABC):
         ...
 
     @abstractmethod
-    def on_render(self, s: pygame.SurfaceType) -> None:
+    def on_render(self, s: pygame.Surface) -> None:
         ...
 
 
@@ -37,19 +37,19 @@ class Game(Scene, BaseModel):
     def on_loop(self) -> None:
         pass
 
-    def on_render(self, s: pygame.SurfaceType) -> None:
+    def on_render(self, s: pygame.Surface) -> None:
         try:
             if self.state == GameState.PLAYING:
                 self.__draw_world(s)
         except Exception as e:
             raise ValueError(e)
 
-    def __draw_world(self, s: pygame.SurfaceType) -> None:
+    def __draw_world(self, s: pygame.Surface) -> None:
         self.__draw_map(s)
         self.__draw_entity(s)
         self.__draw_objects(s)
 
-    def __draw_map(self, s: pygame.SurfaceType) -> None:
+    def __draw_map(self, s: pygame.Surface) -> None:
         map = self.world.map
         w, h = s.get_width(), s.get_height()
         if w > h:
@@ -112,7 +112,10 @@ class Game(Scene, BaseModel):
         pass
 
 
-class Menu(Scene, BaseModel):
+class Menu(Scene, BaseModel, ABC):
+    buttons: List[Button]
+    labels: List[Label]
+
     def on_event(self, event: pygame.event.Event) -> GUIState:
         if event == pygame.KEYDOWN:
             if event == pygame.K_ESCAPE:
@@ -122,6 +125,11 @@ class Menu(Scene, BaseModel):
     def on_loop(self) -> None:
         pass
 
-    def on_render(self, s: pygame.SurfaceType) -> None:
-        b = Button(x=150, y=50, text="Boutton oui")
-        b.draw(s)
+    def on_render(self, s: pygame.Surface) -> None:
+        try:
+            for b in self.buttons:
+                b.draw(s)
+            for lb in self.labels:
+                lb.draw(s)
+        except Exception as e:
+            raise ValueError(e)
